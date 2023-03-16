@@ -1,6 +1,7 @@
 package com.example.superherov5.Controllers;
 
 import com.example.superherov5.DTO.SuperPowerDTO;
+import com.example.superherov5.DTO.SuperPowerNameDTO;
 import com.example.superherov5.DTO.SuperheroFormDTO;
 import com.example.superherov5.Model.SuperheroModel;
 import com.example.superherov5.SuperheroInterface.ISuperHeroRepository;
@@ -43,13 +44,22 @@ public class SuperheroController {
 
         return "register_form";
     }
+    @GetMapping("superheroes")
+    public String getSuperheroes(Model model) {
+        List<SuperheroFormDTO> all = repository.getAll();
+        model.addAttribute("all", all);
+        List<String> superpowers = repository.getSuperPowers();
+        model.addAttribute("superPowers", superpowers);
+        return "all_superheroes";
 
-    @GetMapping("/superherolist")
+    }
+
+   /* @GetMapping("/superherolist")
     public ResponseEntity<List<SuperheroModel>> getAll() {
         System.out.println("hej");
         List<SuperheroModel> superheroList = repository.getAll();
         return new ResponseEntity<>(superheroList, HttpStatus.OK);
-    }
+    } */
     @GetMapping("/{name}")
     public ResponseEntity<List<SuperheroModel>> getSuperhero(@PathVariable String name) {
         List<SuperheroModel> superheroList = repository.getSuperhero(name);

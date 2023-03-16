@@ -1,6 +1,7 @@
 package com.example.superherov5.Repositories;
 
 import com.example.superherov5.DTO.SuperPowerDTO;
+import com.example.superherov5.DTO.SuperheroFormDTO;
 import com.example.superherov5.Model.SuperheroModel;
 import com.example.superherov5.SuperheroInterface.ISuperHeroRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Repository("Superhero_db")
 public class SuperheroRepository implements ISuperHeroRepository {
     @Value("${spring.datasource.url}")
@@ -18,25 +20,34 @@ public class SuperheroRepository implements ISuperHeroRepository {
     String u_id;
     @Value("${spring.datasource.password}")
     String pwd;
-
-    public List<SuperheroModel> getAll() {
-        List<SuperheroModel> superheroes = new ArrayList<>();
+    List<String> superPowers = new ArrayList<>();
+    public List<SuperheroFormDTO> getAll() {
+      //  List<SuperheroModel> superheroes = new ArrayList<>();
+        List<SuperheroFormDTO> superheroesDTO = new ArrayList<>();
+        List<String> superheroPowers = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(db_url, u_id, pwd)) {
-            String SQL = "SELECT * from superhero";
+            String SQL = "SELECT * from superhero join superpower join superheropower join city\n" +
+                    "ON superheropower.id_Superpower = superpower.id\n" +
+                    "AND superhero.id = superheropower.id_Superhero\n" +
+                    "AND city.id = superhero.id_City";
             Statement stmt = con.createStatement();
             ResultSet rst = stmt.executeQuery(SQL);
             while (rst.next()) {
                 String heroName = rst.getString("heroName");
                 String realName = rst.getString("realName");
                 int creationYear = Integer.parseInt(rst.getString("creationYear"));
-                int id_City = Integer.parseInt(rst.getString("id_City"));
+                String powers = rst.getString("name");
+                superheroPowers.add(powers);
                 int id = Integer.parseInt(rst.getString("id"));
-                superheroes.add(new SuperheroModel(id, heroName, realName, creationYear, id_City));
+                String city = rst.getString("city_name");
+
+
+                superheroesDTO.add(new SuperheroFormDTO(id, heroName, realName, creationYear, city, superheroPowers));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return superheroes;
+        return superheroesDTO;
     }
     public List<String> getCities() {
         List<String> cities = new ArrayList<>();
@@ -55,7 +66,6 @@ public class SuperheroRepository implements ISuperHeroRepository {
         return cities;
     }
     public List<String> getSuperPowers() {
-        List<String> superPowers = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(db_url, u_id, pwd)) {
             String SQL = "SELECT name FROM superheroes.superpower";
             Statement stmt = con.createStatement();

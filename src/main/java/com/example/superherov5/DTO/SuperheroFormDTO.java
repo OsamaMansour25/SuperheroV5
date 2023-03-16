@@ -14,7 +14,9 @@ public class SuperheroFormDTO {
 
     private String city;
 
-    List<String> powerList;
+
+  private List<String> powerList;
+
 
     public SuperheroFormDTO(int heroId, String heroName, String realName,
 
