@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>User Registration</title>
+    <style type="text/css">
+        body {
+
+            max-width: 500px;
+
+            margin: auto;
+
+            background: white;
+
+            padding: 10px;
+
+        }
+
+        h1 {
+
+            font-family:Arial;
+
+            font-size: 1.5em;
+
+        }
+
+        label {
+
+            width: 150px;
+
+            display: inline-block;
+
+        }
+
+        table, th, td {
+
+            border: 1px solid black;
+
+            border-collapse: collapse;
+
+            padding: 5px;
+
+        }
+
+        th {
+
+            text-align: left;
+
+        }
+
+        select, input[type="text"], input[type="number"]{
+
+            width:200px;
+
+            box-sizing:border-box;
+
+        }
+    </style>
+</head>
+<body>
+<div align="center">
+    <h1>User Registration</h1>
+    <form action="#" th:action="@{/register}" method="post" th:object="${sh}">
+        <label>Hero name:</label>
+        <input type="text" th:field="*{heroName}" /><br/>
+
+        <label>Real name::</label>
+        <input type="text" th:field="*{realName}" /><br/>
+
+        <label>Creation year:</label>
+        <input type="password" th:field="*{creationYear}" /><br/>
+
+        <label>City:</label>
+        <select th:field="*{city}">
+            <option th:each="p : ${Cities}" th:value="${p}" th:text="${p}" />
+        </select>
+        <br/>
+
+
+
+
+
+
+        <br/>
+            <label>Select SuperPowers(Multiple):</label>
+        <br/>
+            <input type="checkbox" th:each="p : ${superPowers}" th:text="${p}" th:value="${p}"
+            /> <br/>
+
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+</body>
+</html>
