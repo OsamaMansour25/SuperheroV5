@@ -11,9 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +29,20 @@ public class SuperheroController {
            // this.repository = repository;
             this.repository = repository;
         }*/
+    @GetMapping("/create")
+    public String addSuperHero(Model model){
+        SuperheroFormDTO sm = new SuperheroFormDTO();
+        model.addAttribute("sm", sm);
+        return "create";
+    }
+    @PostMapping("/create")
+    public String createProduct(@ModelAttribute SuperheroFormDTO sm){
+        //gem i repository
+        repository.addSuperhero(sm);
+        return "redirect:/";
+    }
+
+
     @GetMapping("/register")
     public String showForm(Model model) {
         SuperheroFormDTO sh = new SuperheroFormDTO();
@@ -46,7 +58,7 @@ public class SuperheroController {
     }
     @GetMapping("superheroes")
     public String getSuperheroes(Model model) {
-        List<SuperheroFormDTO> all = repository.getAll();
+        List<SuperheroModel> all = repository.getAll();
         model.addAttribute("all", all);
         List<String> superpowers = repository.getSuperPowers();
         model.addAttribute("superPowers", superpowers);

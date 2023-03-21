@@ -1,0 +1,23 @@
+<<form action="superhero/create" method="post" th:object="${sm}">
+    <label for="heroName">heroName: </label>
+    <input id="heroName" th:field="*{sm.getHeroName()}">
+
+    <label for="realName">realName: </label>
+    <input id="realName" th:field="*{sm.getRealName()}">
+
+    <label for="CreationYear">Creation year: </label>
+    <input id="CreationYear" th:field="*{sm.getCreationYear()}">
+
+    <label for="City">City: </label>
+    <input id="City" th:field="*{sm.getCity()}">
+
+    <label for="Powerlist">Powerlist: </label>
+    <input id="Powerlist" th:field="*{sm.getPowerList()}">
+
+
+</form>
+
+    <br/>
+
+
+    <button type="submit">Register</button>

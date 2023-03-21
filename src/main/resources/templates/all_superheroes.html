@@ -19,16 +19,32 @@
 </thead>
   <tbody>
   <tr th:each="Superhero : ${all}">
-    <td th:text="${Superhero.heroId}"></td>
+    <td th:text="${Superhero.id}"></td>
     <td th:text="${Superhero.heroName}"></td>
     <td th:text="${Superhero.realName}"></td>
     <td th:text="${Superhero.creationYear}"></td>
-    <td th:text="${Superhero.city}"></td>
-  </tr>
-  <tr th:each="Superpowers : ${superPowers}">
-    <td th:text="${Superpowers}"></td>
-  </tr>
+    <td th:text="${Superhero.id_City}"></td>
+    <td>
+      <button type="button" class="btn-light" style="margin-left: 35px" onclick="togglePowers(this)">
+        Powers
+        <span th:text="${Superhero.powers}" style="display: none;"></span>
+      </button>
+    </td>
+
+    <script>
+      function togglePowers(button) {
+        var powers = button.querySelector('span');
+        if (powers.style.display === 'none') {
+          powers.style.display = 'block';
+        } else {
+          powers.style.display = 'none';
+        }
+      }
+    </script>
   </tbody>
+  <button type="button" class="btn-light" style="margin-left: 35px">
+    Tilføj superhelt
+  </button>
 </table>
 
 </body>

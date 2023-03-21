@@ -7,6 +7,15 @@ public class SuperheroModel {
     private int id;
     private int id_City;
     private String city;
+    private String powers;
+
+    public String getPowers() {
+        return powers;
+    }
+
+    public void setPowers(String powers) {
+        this.powers = powers;
+    }
 
     public String getCity() {
         return city;
@@ -16,12 +25,13 @@ public class SuperheroModel {
         this.city = city;
     }
 
-    public SuperheroModel(int id, String heroName, String realName, int creationYear, int id_City) {
+    public SuperheroModel(int id, String heroName, String realName, int creationYear, int id_City, String powers) {
         this.heroName = heroName;
         this.realName = realName;
         this.creationYear = creationYear;
         this.id_City = id_City;
         this.id = id;
+        this.powers = powers;
     }
 
     public void setHeroName(String heroName) {

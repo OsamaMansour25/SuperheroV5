@@ -14,8 +14,19 @@ public class SuperheroFormDTO {
 
     private String city;
 
+    @Override
+    public String toString() {
+        return "SuperheroFormDTO{" +
+                "heroId=" + heroId +
+                ", heroName='" + heroName + '\'' +
+                ", realName='" + realName + '\'' +
+                ", creationYear=" + creationYear +
+                ", city='" + city + '\'' +
+                ", powerList=" + powerList +
+                '}';
+    }
 
-  private List<String> powerList;
+    private List<String> powerList;
 
 
     public SuperheroFormDTO(int heroId, String heroName, String realName,

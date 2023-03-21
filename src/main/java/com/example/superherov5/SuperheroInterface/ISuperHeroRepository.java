@@ -1,14 +1,15 @@
 package com.example.superherov5.SuperheroInterface;
 
 import com.example.superherov5.DTO.SuperPowerDTO;
-import com.example.superherov5.DTO.SuperPowerNameDTO;
 import com.example.superherov5.DTO.SuperheroFormDTO;
 import com.example.superherov5.Model.SuperheroModel;
 
 import java.util.List;
 
 public interface ISuperHeroRepository {
-    default List<SuperheroFormDTO> getAll() {
+    default void addSuperhero(SuperheroFormDTO form) {
+    }
+    default List<SuperheroModel> getAll() {
         return null;
     }
     default List<SuperheroModel> getSuperhero(String name) {
@@ -30,4 +31,5 @@ public interface ISuperHeroRepository {
     default List<String> getCities() {
         return null;
     }
+
 }
