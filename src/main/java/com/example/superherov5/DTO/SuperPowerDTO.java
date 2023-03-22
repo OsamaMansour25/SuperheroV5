@@ -1,25 +1,26 @@
 package com.example.superherov5.DTO;
 
+import java.util.List;
+
 public class SuperPowerDTO {
-    int count;
-    String heroName;
-    String realName;
+    private String heroName;
+    private List<String> powerlist;
 
-    public SuperPowerDTO(String heroName, String realName, int count) {
+    public List<String> getPowerlist() {
+        return powerlist;
+    }
+
+    public SuperPowerDTO(String heroName, List<String> powerlist) {
         this.heroName = heroName;
-        this.realName = realName;
-        this.count = count;
+        this.powerlist = powerlist;
     }
 
-    public int getCount() {
-        return count;
-    }
 
     public String getHeroName() {
         return heroName;
     }
-
-    public String getRealName() {
-        return realName;
+    public void addPower(String power) {
+        powerlist.add(power);
     }
+
 }

@@ -1,7 +1,7 @@
 package com.example.superherov5.Controllers;
 
+import com.example.superherov5.DTO.HeroInfoDTO;
 import com.example.superherov5.DTO.SuperPowerDTO;
-import com.example.superherov5.DTO.SuperPowerNameDTO;
 import com.example.superherov5.DTO.SuperheroFormDTO;
 import com.example.superherov5.Model.SuperheroModel;
 import com.example.superherov5.SuperheroInterface.ISuperHeroRepository;
@@ -35,11 +35,11 @@ public class SuperheroController {
         model.addAttribute("sm", sm);
         return "create";
     }
-    @PostMapping("/create")
-    public String createProduct(@ModelAttribute SuperheroFormDTO sm){
+    @PostMapping("/add")
+    public String createSuperHero(@ModelAttribute SuperheroFormDTO sm){
         //gem i repository
         repository.addSuperhero(sm);
-        return "redirect:/";
+        return "redirect:/superhero";
     }
 
 
@@ -58,20 +58,21 @@ public class SuperheroController {
     }
     @GetMapping("superheroes")
     public String getSuperheroes(Model model) {
-        List<SuperheroModel> all = repository.getAll();
+        List<HeroInfoDTO> all = repository.getAll();
         model.addAttribute("all", all);
-        List<String> superpowers = repository.getSuperPowers();
-        model.addAttribute("superPowers", superpowers);
+       // List<String> superpowers = repository.getSuperPowers();
+      //  model.addAttribute("superPowers", superpowers);
         return "all_superheroes";
 
     }
+    @GetMapping("superpower/{name}")
+    public String getPowers (@PathVariable String name, Model model){
+        SuperPowerDTO superpower = repository.getSuperheroPower(name);
+        model.addAttribute("name", superpower.getHeroName());
+        model.addAttribute("powers", superpower.getPowerlist());
+        return "powers";
+    }
 
-   /* @GetMapping("/superherolist")
-    public ResponseEntity<List<SuperheroModel>> getAll() {
-        System.out.println("hej");
-        List<SuperheroModel> superheroList = repository.getAll();
-        return new ResponseEntity<>(superheroList, HttpStatus.OK);
-    } */
     @GetMapping("/{name}")
     public ResponseEntity<List<SuperheroModel>> getSuperhero(@PathVariable String name) {
         List<SuperheroModel> superheroList = repository.getSuperhero(name);
@@ -80,11 +81,6 @@ public class SuperheroController {
     @GetMapping("/city/{name}")
     public ResponseEntity<List<SuperheroModel>> getSuperheroesFromCity(@PathVariable String name) {
         List<SuperheroModel> superhero = repository.getSuperheroesFromCity(name);
-        return new ResponseEntity<>(superhero, HttpStatus.OK);
-    }
-    @GetMapping("/superpower/{name}")
-    public ResponseEntity<List<SuperheroModel>> getSuperheroPower(@PathVariable String name) {
-        List<SuperheroModel> superhero = repository.getSuperheroPower(name);
         return new ResponseEntity<>(superhero, HttpStatus.OK);
     }
     @GetMapping("count/{name}")

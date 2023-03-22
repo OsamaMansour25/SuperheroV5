@@ -1,5 +1,6 @@
 package com.example.superherov5.Repositories;
 
+import com.example.superherov5.DTO.HeroInfoDTO;
 import com.example.superherov5.DTO.SuperPowerDTO;
 import com.example.superherov5.DTO.SuperheroFormDTO;
 import com.example.superherov5.Model.SuperheroModel;
@@ -22,26 +23,20 @@ public class SuperheroRepository implements ISuperHeroRepository {
     String pwd;
 
 
-    public List<SuperheroModel> getAll() {
-        List<SuperheroModel> superheroes = new ArrayList<>();
+    public List<HeroInfoDTO> getAll() {
+        List<HeroInfoDTO> superheroes = new ArrayList<>();
         //  List<String> superheroPowers = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(db_url, u_id, pwd)) {
-            String SQL = "SELECT * from superhero join superpower join superheropower join city\n" +
-                    "ON superheropower.id_Superpower = superpower.id\n" +
-                    "AND superhero.id = superheropower.id_Superhero\n" +
-                    "AND city.id = superhero.id_City;";
+            String SQL = "SELECT * from superhero";
             Statement stmt = con.createStatement();
             ResultSet rst = stmt.executeQuery(SQL);
             while (rst.next()) {
                 String heroName = rst.getString("heroName");
                 String realName = rst.getString("realName");
                 int creationYear = Integer.parseInt(rst.getString("creationYear"));
-                String powers = rst.getString("name");
-                int id = Integer.parseInt(rst.getString("id"));
-                int id_City = Integer.parseInt(rst.getString("id_City"));
 
 
-                superheroes.add(new SuperheroModel(id, heroName, realName, creationYear, id_City, powers));
+                superheroes.add(new HeroInfoDTO(heroName, realName, creationYear));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -122,50 +117,35 @@ public class SuperheroRepository implements ISuperHeroRepository {
         }
     }
 
-    public List<SuperheroModel> getSuperheroPower(String name) {
-        List<SuperheroModel> superheroes = new ArrayList<>();
+    public SuperPowerDTO getSuperheroPower(String name) {
+        SuperPowerDTO superPowers = null;
         try (Connection con = DriverManager.getConnection(db_url, u_id, pwd)) {
             String SQL = "SELECT * from superhero join superpower join superheropower\n" +
                     "ON superheropower.id_Superpower = superpower.id\n" +
                     "AND superhero.id = superheropower.id_Superhero\n" +
-                    "AND superpower.name = ?";
+                    "AND heroName = ?";
             PreparedStatement pst = con.prepareStatement(SQL);
             pst.setString(1, name);
             ResultSet rs = pst.executeQuery();
+            String currentName = "";
             while (rs.next()) {
-                SuperheroModel superhero = new SuperheroModel(rs.getInt(1), rs.getString(2), rs.getString(3),
-                        rs.getInt(4), rs.getInt(5), rs.getString(6));
-                superheroes.add(superhero);
+               String heroesName = rs.getString("heroName");
+               String powers = rs.getString("name");
+               if(currentName.equals(heroesName)) {
+                   superPowers.addPower(powers);
+               }
+               else {
+
+                   superPowers = new SuperPowerDTO(heroesName, new ArrayList<>(List.of(powers)));
+                   currentName = heroesName;
+               }
             }
-            System.out.println(superheroes);
-            return superheroes;
+            return superPowers;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public List<SuperPowerDTO> countSuperheroPower(String name) {
-        List<SuperPowerDTO> superheroes = new ArrayList<>();
-        try (Connection con = DriverManager.getConnection(db_url, u_id, pwd)) {
-            String SQL = "SELECT superhero.id, superhero.heroName, realName, count(superheropower.id_Superhero) " +
-                    "AS count from superhero join superheropower where heroName = ? group by superhero.id;";
-            PreparedStatement pst = con.prepareStatement(SQL);
-            pst.setString(1, name);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                String heroName = rs.getString("heroName");
-                String realName = rs.getString("realName");
-                int count = rs.getInt("count");
-                SuperPowerDTO spd = new SuperPowerDTO(heroName, realName, count);
-
-                superheroes.add(spd);
-            }
-            return superheroes;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void addSuperHero(SuperheroFormDTO form) {
         try (Connection con = DriverManager.getConnection(db_url, u_id, pwd)) {
